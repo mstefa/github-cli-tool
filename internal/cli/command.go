@@ -11,20 +11,20 @@ type CobraFn func(cmd *cobra.Command, args []string)
 
 const idFlag = "id"
 
-func InitCmd(repository ghRepos.ReposRepository) *cobra.Command {
+func InitCmd(repository ghRepos.ReposRepository, csv ghRepos.ReposCsv) *cobra.Command {
 	usersCmd := &cobra.Command{
 		Use:   "user",
 		Short: "Fecht gitHub user data according the parameter it recibe",
-		Run:   ghUsersFn(repository),
+		Run:   ghUsersFn(repository, csv),
 	}
 
 	return usersCmd
 }
 
-func ghUsersFn(repository ghRepos.ReposRepository) CobraFn {
+func ghUsersFn(repository ghRepos.ReposRepository, csv ghRepos.ReposCsv) CobraFn {
 	return func(cmd *cobra.Command, args []string) {
 		repos, _ := repository.GetReposByUserName()
 		fmt.Println("hola!")
-		fmt.Println(repos)
+		csv.SaveRepos(repos)
 	}
 }
